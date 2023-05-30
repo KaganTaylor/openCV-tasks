@@ -31,6 +31,15 @@ while capture:
     ## Apply Mask to Original Frame ##
     output = cv.bitwise_and(frame, frame, mask=mask)
 
+    ## Generate Contours from Mask ##
+    contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    #cv.drawContours(output, contours, -1, (0,0,255), 2)
+
+    ## Draw Boxes from Contours ##
+    for cnt in contours:
+        x,y,w,h = cv.boundingRect(cnt)
+        output = cv.rectangle(output, (x,y), (x+w,y+h), (0,255,0), 2)
+
     ## Show Output ##
     cv.imshow('output', output)
 
