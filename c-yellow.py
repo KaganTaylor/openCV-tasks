@@ -9,6 +9,7 @@ if not cap.isOpened():
     exit()
 
 # Continuously Capture Frames #
+lastX, lastY = 0,0
 capture = True
 while capture:
     successful, frame = cap.read()
@@ -37,8 +38,15 @@ while capture:
     ## Draw Box over Largest Contour ##
     if(contours):
         obj = max(contours, key=lambda c : cv.contourArea(c))
-        x, y, w, h = cv.boundingRect(obj)
-        output = cv.rectangle(output, (x,y), (x+w, y+h), (0,255,0), 2)
+        x, y, w, h = cv.boundingRect(obj)                               # x,y = top left co-ordinates
+        output = cv.rectangle(output, (x,y), (x+w, y+h), (0,255,0), 2)  # Green Box, Width 2
+
+        ### Print Direction Vector ###
+        xMovement = x-lastX
+        yMovement = lastY-y
+        lastX, lastY = x, y
+        if(xMovement or yMovement):
+            print([xMovement, yMovement])
 
     ## Show Output ##
     cv.imshow('output', output)
